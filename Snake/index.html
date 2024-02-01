@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Snake</title>
+  </head>
+  <body onload="main();">
+    <!--[if lt IE 7]>
+      <p class="browsehappy">
+        You are using an <strong>outdated</strong> browser. Please
+        <a href="#">upgrade your browser</a> to improve your experience.
+      </p>
+    <![endif]-->
+    <a class="logo--menu" href="../../html-css/index.html">
+      <img
+        id="logoSpikeWeb"
+        src="../logomin.png"
+        alt="Visiter le site de Spike Web"
+      />
+    </a>
+    <nav class="mainNavBar">
+      <ul>
+        <li><a href="../../html-css/aboutMe.html">à propos</a></li>
+        <li>
+          <a href="../../html-css/portfolio.html">portfolio</a>
+          <ul class="scrolling--menu">
+            <li><a href="../Snake/index.html">Snake</a></li>
+            <li><a href="../Snake/index.html">Tetris</a></li>
+            <li><a href="../Snake/index.html">E-commerce</a></li>
+            <li><a href="../Snake/index.html">Photo Book</a></li>
+          </ul>
+        </li>
+        <li><a href="../../html-css/contact.html">contact</a></li>
+      </ul>
+    </nav>
+      <canvas id="board" width="400" height="400"></canvas>
+    <script src="scripts.js"></script>
+  </body>
+</html>
