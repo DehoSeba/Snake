@@ -2,17 +2,20 @@
 let score = 0;
 let canvas = document.getElementById("board");
 const ctx = canvas.getContext("2d");
+const gameWidth = board.maxWidth;
+const gameHeight = board.maxHeight;
 let rightPressed = false;
 let leftPressed = false;
 let upPressed = false;
 let downPressed = false;
+let lost = false;
 let snake = [
   { x: 200, y: 200, w: 10, h: 10, speed: 5 },
   { x: 200, y: 190, w: 10, h: 10, speed: 5 },
   { x: 200, y: 180, w: 10, h: 10, speed: 5 }
 ];
-let isGameOver = false;
-
+let fruit = { x: Math.floor(Math.random()*400), y: Math.floor(Math.random()*400), w: 10, h: 10, };
+let hasEaten = false;
 //draw board
 function drawBoard() {
   ctx.fillStyle = "rgb(0,0,0)";
@@ -99,8 +102,20 @@ function move() {
 }
 //detect collision
 function detectCol(){
-  //si je sors du canevas je coll
-  //si ma tête touche mon body je coll 
+    switch(lost){
+    case(snake[0].x< 0):
+    lost = true;
+    break;
+    case(snake[0].y< 0):
+    lost = true;
+    break;
+    case(snake[0].y> gameHeight):
+    lost = true;
+    break;
+    case(snake[0].x> gameWidth):
+    lost = true;
+    break;
+  }
 }
 //change direction snake
 function changeDirection() {
@@ -124,12 +139,11 @@ function changeDirection() {
   requestAnimationFrame(changeDirection);
 }
 //random fruits appearing and detect if snake ate it then repop another one
-let fruit = { x: 100, y: 100, w: 10, h: 10, speed: 5 };
-let hasEaten = Boolean;
 function ateFruit() {
-  if (fruit.x && fruit.y === snake.x && snake.y) {
+  if (fruit.x && fruit.y == snake[0].x && snake[0].y) {
     hasEaten = true;
-    score++;
+    score+=10;
+    return(score);
   } else {
     hasEaten = false;
   }
@@ -140,18 +154,35 @@ function drawFruit() {
   ctx.strokeRect(fruit.x, fruit.y, fruit.h, fruit.w);
 }
 //eating fruits grow snake and score
-
+//restart game 
+function restart(){
+  snake = [
+    { x: 200, y: 200, w: 10, h: 10, speed: 5 },
+    { x: 200, y: 190, w: 10, h: 10, speed: 5 },
+    { x: 200, y: 180, w: 10, h: 10, speed: 5 }
+  ];
+  score = 0;
+  gameStart(); 
+}
 //game loop
-
+function gameStart(){
+  if(lost === false){
+    drawBoard();
+    drawScore();
+    drawSnake();
+    detectCol();
+    move();
+    changeDirection(); 
+    keyDownHandler();
+    keyUpHandler();
+    ateFruit();
+  }
+  else {
+    prompt("looser");
+  }
+}
 //main
 function main() {
-  drawBoard();
-  drawScore();
-  drawSnake();
-  keyDownHandler();
-  keyUpHandler();
-  ateFruit();
-  move();
-  changeDirection();
-  detectCol();
+  gameStart();
+
 }
