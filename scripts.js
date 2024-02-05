@@ -1,38 +1,59 @@
-//variables
+//VARIABLES//
 let score = 0;
-const itemScale = 10; //if one day i want to let player adjust board game
+let itemScale = 10;
+let background = "rgb(0, 0, 0)";
+let snakeColor = "rgb(255, 255, 255)";
+let fruitColor = "rgb(240, 0, 32)";
 let canvas = document.getElementById("board");
 const ctx = canvas.getContext("2d");
-const gameWidth = board.width;
-const gameHeight = board.height;
-let rightPressed = false;
-let leftPressed = false;
-let upPressed = false;
-let downPressed = false;
+let displayScore = document.getElementById("score");
+let reset = document.getElementById("restart"); //restart button
+reset.addEventListener("click", restart);
+let direction = "right";
 let lost = false;
 let snake = [
-  { x: 200, y: 200, w: itemScale, h: itemScale,},
-  { x: 200, y: 190, w: itemScale, h: itemScale,},
-  { x: 200, y: 180, w: itemScale, h: itemScale,}
+  { x: 200, y: 200 },
+  { x: 200, y: 190 },
+  { x: 200, y: 180 },
 ];
-//draw board
+let snakeHead = snake[0];
+let snakeSpeed = 5;
+let fruit = {
+  x: Math.floor(Math.random() * (canvas.width - itemScale)), //random fruit pos
+  y: Math.floor(Math.random() * (canvas.height - itemScale)),
+};
+//////////////////////////////////////////////////////////////////////////
+//FUNCTIONS//
+//Board init//
 function drawBoard() {
-  ctx.fillStyle = "rgb(0,0,0)";
-  ctx.fillRect(0, 0, gameWidth, gameHeight);
+  ctx.fillStyle = background;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
-//create snake
+//Snake init//
 function drawSnake() {
-  ctx.fillStyle = "green";
-  snake.forEach(snakePart=> {
-  ctx.fillRect(snakePart.x, snakePart.y, itemScale, itemScale);
-  ctx.strokeRect(snakePart.x, snakePart.y, itemScale, itemScale);})
+  ctx.fillStyle = snakeColor;
+  snake.forEach((snakePart) => {
+    ctx.fillRect(snakePart.x, snakePart.y, itemScale, itemScale);
+    ctx.strokeRect(snakePart.x, snakePart.y, itemScale, itemScale);
+  });
 }
-//create score
+//Create Score//
 function drawScore() {
-  ctx.fillStyle = "rgb(255,255,255)";
-  ctx.fillText(`Score: ${score}`, 0, 10);
+  displayScore.innerHTML = `Score : ${score}`;
 }
-//detect if i press a movement key
+//Draw fruits
+function drawFruit() {
+  if (fruit.x != snake.x && fruit.y != snake.y) {
+    ctx.fillStyle = fruitColor;
+    ctx.fillRect(fruit.x, fruit.y, itemScale, itemScale);
+  } else {
+    fruit = {
+      x: Math.floor(Math.random() * (gameWidth - itemScale)), //random fruit pos
+      y: Math.floor(Math.random() * (gameHeight - itemScale)),
+    };
+  }
+}
+//Detect if i press a key//
 function keyDownHandler() {
   window.addEventListener("keydown", (event) => {
     if (event.defaultPrevented) {
@@ -42,51 +63,19 @@ function keyDownHandler() {
     switch (event.code) {
       case "KeyS":
       case "ArrowDown":
-        downPressed = true;
+        direction = "down";
         break;
       case "KeyW":
       case "ArrowUp":
-        upPressed = true;
+        direction = "up";
         break;
       case "KeyA":
       case "ArrowLeft":
-        leftPressed = true;
+        direction = "left";
         break;
       case "KeyD":
       case "ArrowRight":
-        rightPressed = true;
-        break;
-    }
-    if (event.code !== "Tab") {
-      //consume the event so it doesn't get handled twice exept if the user want to leave the window
-      event.preventDefault();
-    }
-  },
-  );
-}
-//detect if i released a movement key
-function keyUpHandler() {
-  window.addEventListener("keyup", (event) => {
-    if (event.defaultPrevented) {
-      return; // Do nothing if event already handled
-    }
-
-    switch (event.code) {
-      case "KeyS":
-      case "ArrowDown":
-        downPressed = false;
-        break;
-      case "KeyW":
-      case "ArrowUp":
-        upPressed = false;
-        break;
-      case "KeyA":
-      case "ArrowLeft":
-        leftPressed = false;
-        break;
-      case "KeyD":
-      case "ArrowRight":
-        rightPressed = false;
+        direction = "right";
         break;
     }
     if (event.code !== "Tab") {
@@ -95,56 +84,93 @@ function keyUpHandler() {
     }
   });
 }
-//auto move snake
+//Move
 function move() {
+  switch (direction) {
+    case "right":
+      snake.pop;
 
-}
-//detect collision
-function detectCol(){
-  switch(lost){
-    case(snake[0].x< 0):
-    lost = true;
-    break;
-    case(snake[0].y< 0):
-    lost = true;
-    break;
-    case(snake[0].y> gameHeight):
-    lost = true;
-    break;
-    case(snake[0].x> gameWidth):
-    lost = true;
-    break;
-    default:
-      lost = false;
+      break;
+    case "left":
+      snake.pop;
+
+      break;
+    case "up":
+      snake.pop;
+
+      break;
+    case "down":
+      snake.pop;
+
       break;
   }
 }
-//change direction snake
-function changeDirection() {
+//Detect colision with wall and body
+function detectCol() {
+  switch (lost) {
+    case snakeHead.x < 0:
+      lost = !true;
+      break;
+    case snakeHead.y < 0:
+      lost = !true;
+      break;
+    case snakeHead.x > gameHeight:
+      lost = !true;
+      break;
+    case snakeHead.y > gameWidth:
+      lost = !true;
+      break;
+    default:
+      lost = !false;
+      break;
+  }
+}
+//Eat fruit spawn another one, spawn a snake part and increment score
+function ateFruit() {}
+//Game Over
+function gameOver() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  if (upPressed) {
-    snake.forEach(snakePart=>{snakePart.y -= 2});
-  }
-  if (downPressed) {
-    snake.forEach(snakePart=>{snakePart.y += 2});
-  }
-  if (rightPressed) {
-    snake.forEach(snakePart=>{snakePart.x += 2});
-  }
-  if (leftPressed) {
-    snake.forEach(snakePart=>{snakePart.x -= 2});
-  }
+  drawBoard();
+  ctx.font = "50px futur";
+  ctx.fillStyle = "white";
+  ctx.textAlign = "center";
+  ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
+  reset.style.visibility = 'visible';
 }
-//random fruits appearing and detect if snake ate it then repop another one
-let fruit = { x: Math.random(Math.floor(gameWidth)*391), y: Math.random(Math.floor(gameHeight)*391), };
-function drawFruit() {
-  ctx.fillStyle = "rgb(255,255,255)";
-  ctx.fillRect(fruit.x, fruit.y, itemScale, itemScale);
-  ctx.strokeRect(fruit.x, fruit.y, itemScale, itemScale);
+//Restart
+function restart() {
+  score = 0;
+  snake = [
+    { x: 200, y: 200 },
+    { x: 200, y: 190 },
+    { x: 200, y: 180 },
+  ];
+  fruit = {
+    x: Math.floor(Math.random() * canvas.width - itemScale),
+    y: Math.floor(Math.random() * canvas.height - itemScale),
+  };
+  reset.style.visibility = 'hidden';
+  gameStart();
 }
-//eating fruits grow snake and score
+//Game Loop
+function gameLoop() {
+  if(lost == false){
 
-//game loop
-function gameStart(){
+  }
+  else if (lost == true){
+    gameOver();
+  }
 }
-//main
+//Start
+function gameStart() {
+  lost = false;
+  drawBoard();
+  drawSnake();
+  drawFruit();
+  drawScore();
+}
+//Main
+function main() {
+  gameStart();
+  gameLoop();
+}

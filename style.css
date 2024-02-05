@@ -48,7 +48,7 @@
 }
 
 body {
-  background-color: #bcc7c5;
+  background-color: #000;
 }
 
 .portfolioBody {
@@ -112,4 +112,58 @@ canvas {
   position: absolute;
   top: 200px;
   left: 600px;
+  border: white 3px solid;
+}
+#restart{
+  display: flex;
+  position: absolute;
+  top: 500px;
+  left: 750px;
+  font-family: futur;
+  visibility: hidden;
+  background: none;
+  border: 1px solid #ffffff;
+  border-radius: 10px;
+  padding: 10px;
+  color: rgb(255, 255, 255);
+  font-size: 20px;
+}
+#restart:hover{
+  background-color: #ffffff;
+  color: #000;
+}
+#score{
+  display: flex;
+  position: absolute;
+  top: 180px;
+  left: 900px;
+  font-family: futur;
+  color:  #ffffff;
+}
+@font-face {
+  font-family: futur;
+  src: url(../../nasalization-free/nasalization-rg.otf);
+}
+.snakeTitle{
+  display: flex;
+  position: absolute;
+  top: 440px;
+  left: 440px;
+  font-family: futur;
+  color:  #ffffff;
+  transform: rotate(-90deg);
+}
+#gameOver{
+  font-family: futur;
+}
+#leaderboard{
+  position: absolute;
+  font-family: futur;
+  color:  #ffffff;
+  left: 1300px;
+  top: 200px;
+  list-style: none;
+  border: 1px solid #ffffff;
+  border-radius: 10px;
+  padding: 10px;
 }
